@@ -1,0 +1,20 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    text-align: center;
+}
+
+.button {
+    color: blueviolet;
+}
+
+#countdown {
+    margin: 0;
+}
+
+a {
+    margin: 5px 0 5px 0;
+}
