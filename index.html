@@ -8,23 +8,36 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
-    <header>
+    
         <div class="header-container">
-            <a href="#high-scores">View high scores</a>
-            <h3 id="countdown"></h1>
+            <a href="highScores.html">View high scores</a>
         </div>
-    </header>
+        <div>
+            <h3 id="countdown"> <span id="time">0</span> </h1>
+        </div>
+
 
     <main>        
     <div class="container">
         <div id="quiz">
             <h1 id="h1-text">Coding Quiz Challenge</h1>
-        <p id="paragraph">Try to ancwer the following code-related questions within the time limit.<br>Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+            <p id="paragraph">Try to ancwer the following code-related questions within the time limit.<br>Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+        <!-- </div>
+        <div> -->
+            <button class="button" id="submit">Start Quiz</button>
         </div>
-        
-        <button class="button" id="submit">Start Quiz</button>
+        <div id="questions" class="hide">
+            <h2 id="question"></h2>
+            <div id="answers" class="answers"></div>
+        </div>
 
-        <div id="results"></div>
+        <div id="results" class="hide">
+            <form action="">
+                <label for="GET-name">To save the score please enter your name: </label>
+                <input id="GET-name" type="text" name="name">
+                <input type="submit" value="Save">
+            </form>
+        </div>
     </div>
     </main>
 

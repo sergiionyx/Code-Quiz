@@ -1,176 +1,134 @@
 var timerEl = document.getElementById('countdown');
-var taskIdCounter = 0;
-var quizContainer = document.getElementById('quiz');
-var resultsContainer = document.getElementById('results');
-var submitButton = document.getElementById('submit');
-var questionEl = document.getElementById('h1-text');
+var taskIdIndex = 0;
+var quizEl = document.getElementById('quiz');
+var results = document.getElementById('results');
+var submitBtnEl = document.getElementById('submit');
+var answersEl = document.getElementById("answers");
+var questionsEl = document.getElementById("questions")
 var paragraph = document.getElementById('paragraph');
-var j = 0;
-//Timer
-function countdown() {
-    var timeLeft = 25;
-  
-    var timeInterval = setInterval(function() {
-      if(timeLeft > 0) {
-        timerEl.textContent = "Time: " + timeLeft + " seconds left.";
-        timeLeft--;
-        return
-      }
-      else {
-        //displayMessage();
-        //mainEl.textContent = "Boooooom!";
-        clearInterval(timeInterval);
-        timerEl.textContent = "";
-      }
-      
-    }, 1000);
-}
-
-
-
+var timeLeft;
+var saveScoreBtn = document.getElementById("save");
+var countdown;
+var initials = document.getElementById("GET-name");
+//var recordNameArr = [];
+var timeEl = document.getElementById("time");
 //Array with Q/A
 var questions = [
-	{
-		question: "What is 10/2?",
-		answers: {
-			1: '3',
-			2: '5',
-			3: '115',
-            4: 'blah'
-		},
-		correctAnswer: '2'
-	},
-	{
-		question: "What is 30/3?",
-		answers: {
-			1: 'qw',
-			2: 'asd',
-			3: 'xzc',
-            4: '1q2w3e'
-		},
-		correctAnswer: '3'
-	}
+    {
+        question: "What is 10/2?",
+        answers: [
+            '3',
+            '5',
+            '115',
+            'blah'
+        ],
+        correctAnswer: '5'
+    },
+    {
+        question: "What is 30/3?",
+        answers: [
+            '10',
+            'asd',
+            'xzc',
+            '1q2w3e'
+        ],
+        correctAnswer: '10'
+    }
 ];
+
+var time = questions.length * 100;
+
+//Timer
+function countdown() {
+    time--;
+    timeEl.textContent = "Time: " + time + " seconds left.";
+    if (time <= 0) {
+        endQuiz();
+        
+    }
+}
 
 //function
 function start() {
-    submitButton.textContent = "Next question!";
-    
-    paragraph.innerText = "";
-    for (i=0; i < 4; i++) {
-        var answerItemEl = document.createElement("button");
-        answerItemEl.className = "answer-item";
-        answerItemEl.setAttribute("data-answer-id", taskIdCounter);
-
-        quizContainer.appendChild(answerItemEl);     
-    }
-    quizGeneration(questions);
+    quizEl.setAttribute("class", "hide");
+    questionsEl.removeAttribute("class");
+    timeLeft = setInterval(countdown, 1000);
+    timeEl.textContent = time;
+    quizGeneration();
 }
-
 
 //Function to make a quiz
-function quizGeneration (questions) {
-    //quizContainer.replaceChildren(quizContainer.replaceChildren);
-    
-    questionEl.innerText = questions[j].question;
+function quizGeneration() {
+    var currentQuestion = questions[taskIdIndex];
+    var questionEl = document.getElementById("question");
+    questionEl.textContent = currentQuestion.question;
 
-    for (i=0; i < 4; i++) {
-        
-        var answerButton = document.querySelector(
-            ".answer-item[data-answer-id='" + i + "']"
-          );
-        answers = Object.values(questions[j].answers);
-        answerButton.textContent = answers[i];        
-    }
-    j++;
+    answersEl.innerHTML = "";
+    currentQuestion.answers.forEach(function (answer, i) {
+        var answerBtn = document.createElement("button");
+        answerBtn.setAttribute("class", "answer");
+        answerBtn.setAttribute("value", answer);
+        answerBtn.textContent = i + 1 + " . " + answer;
+        answerBtn.onclick = checkAnswer;
+        answersEl.appendChild(answerBtn);
+    });
 }
 
-submitButton.addEventListener("click", start);
-
- /*
-    
- function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
-	function showQuestions(questions, quizContainer){
-        // we'll need a place to store the output and the answer choices
-        var output = [];
-        var answers;
-    
-        // for each question...
-        for(var i=0; i<questions.length; i++){
-            
-            // first reset the list of answers
-            answers = [];
-    
-            // for each available answer to this question...
-            for(number in questions[i].answers){
-    
-                // ...add an html radio button
-                answers.push(
-                    '<label>'
-                        + '<input type="radio" name="question'+i+'" value="'+number+'">'
-                        + number + ': '
-                        + questions[i].answers[number]
-                    + '</label>'
-                );
-            }
-    
-            // add this question and its answers to the output
-            output.push(
-                '<div class="question">' + questions[i].question + '</div>'
-                + '<div class="answers">' + answers.join('') + '</div>'
-            );
+function checkAnswer() {
+    if (this.value !== questions[taskIdIndex].correctAnswer) {
+        time -= 10;
+        if (time < 0) {
+            time = 0;
         }
-
-        // finally combine our output list into one string of html and put it on the page
-        quizContainer.innerHTML = output.join('');
     }
 
-	function showResults(questions, quizContainer, resultsContainer){
-	
-        // gather answer containers from our quiz
-        var answerContainers = quizContainer.querySelectorAll('.answers');
-        
-        // keep track of user's answers
-        var userAnswer = '';
-        var numCorrect = 0;
-        
-        // for each question...
-        for(var i=0; i<questions.length; i++){
-    
-            // find selected answer
-            userAnswer = (answerContainers[i].querySelector('input[name=question'+i+']:checked')||{}).value;
-            
-            // if answer is correct
-            if(userAnswer===questions[i].correctAnswer){
-                // add to the number of correct answers
-                numCorrect++;
-                
-                // color the answers green
-                answerContainers[i].style.color = 'lightgreen';
-            }
-            // if answer is wrong or blank
-            else{
-                // color the answers red
-                answerContainers[i].style.color = 'red';
-            }
-        }
-    
-        // show number of correct answers out of total
-        resultsContainer.innerHTML = numCorrect + ' out of ' + questions.length;
+    taskIdIndex++;
+    if (taskIdIndex === questions.length) {
+        endQuiz();
+
     }
+    else {
+        quizGeneration();
+    }
+    
+}
 
-	// show the questions
-	showQuestions(questions, quizContainer);
+function endQuiz() {
+    //debugger;
+    //stop the timer
+    clearInterval(timeLeft);
+    timeEl.textContent = time;
+    questionsEl.setAttribute("class", "hide");
+    results.removeAttribute("class");
+    
+    console.log("this is the end");
+    //calll out the final score
+    //time to final score value
 
-	// when user clicks submit, show results
-	submitButton.onclick = function(){
-		showResults(questions, quizContainer, resultsContainer);
-	}
- */
 
 
 
 
+}
 
-//Start button
 
+
+function saveToLocal() {
+    initials = initials.value.trim();
+    var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+    //window.location.href = "highScores.html";
+    var newScoreObj = {
+        initials: initials,
+        score: time
+    };
+    highScores.push(newScoreObj);
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+    console.log(window.location);
+    window.location.href = "highScores.html";
+}
+
+
+
+submitBtnEl.addEventListener("click", start);
+results.addEventListener("submit", saveToLocal);
