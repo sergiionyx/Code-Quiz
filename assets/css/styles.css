@@ -5,11 +5,10 @@
 
 .container {
     text-align: center;
+    width: 50%;
 }
 
-.button {
-    color: blueviolet;
-}
+
 
 #countdown {
     margin: 0;
@@ -20,5 +19,6 @@ a {
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
+

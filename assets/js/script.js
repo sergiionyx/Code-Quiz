@@ -66,9 +66,9 @@ function quizGeneration() {
     answersEl.innerHTML = "";
     currentQuestion.answers.forEach(function (answer, i) {
         var answerBtn = document.createElement("button");
-        answerBtn.setAttribute("class", "answer");
+        answerBtn.setAttribute("class", "btn btn-primary m-1");
         answerBtn.setAttribute("value", answer);
-        answerBtn.textContent = i + 1 + " . " + answer;
+        answerBtn.innerHTML = i + 1 + " . " + answer;
         answerBtn.onclick = checkAnswer;
         answersEl.appendChild(answerBtn);
     });
@@ -113,7 +113,8 @@ function endQuiz() {
 
 
 
-function saveToLocal() {
+function saveToLocal(e) {
+    e.preventDefault();
     initials = initials.value.trim();
     var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
     //window.location.href = "highScores.html";
