@@ -10,33 +10,65 @@ var timeLeft;
 var saveScoreBtn = document.getElementById("save");
 var countdown;
 var initials = document.getElementById("GET-name");
-//var recordNameArr = [];
 var timeEl = document.getElementById("time");
+var comment = document.getElementById("comment");
+
+
 //Array with Q/A
 var questions = [
     {
-        question: "What is 10/2?",
+        question: "Inside which HTML element do we put the JavaScript?",
         answers: [
-            '3',
-            '5',
-            '115',
-            'blah'
+            'js',
+            'script',
+            'javascript',
+            'scripting'
         ],
-        correctAnswer: '5'
+        correctAnswer: 'script'
     },
     {
-        question: "What is 30/3?",
+        question: "Where is the correct place to insert a JavaScript?",
         answers: [
-            '10',
-            'asd',
-            'xzc',
-            '1q2w3e'
+            'The head section',
+            'Both the <head> section and the <body> section are correct',
+            'The body section',
+            'none'
         ],
-        correctAnswer: '10'
+        correctAnswer: 'The body section'
+    },
+    {
+        question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
+        answers: [
+            'script src="xxx.js"',
+            'script name="xxx.js"',
+            'script href="xxx.js"',
+            'none'
+        ],
+        correctAnswer: 'script src="xxx.js"'
+    },
+    {
+        question: "The external JavaScript file must contain the <script> tag.",
+        answers: [
+            "False",
+            "True",
+            "It's depend where the file located",
+            "It's depend where in html located link to js file"
+        ],
+        correctAnswer: 'False'
+    },
+    {
+        question: 'How do you write "Hello World" in an alert box?',
+        answers: [
+            'alert("Hello World");',
+            'msg("Hello World");',
+            'alertBox("Hello World");',
+            'msgBox("Hello World");'
+        ],
+        correctAnswer: 'alert("Hello World");'
     }
 ];
 
-var time = questions.length * 100;
+var time = questions.length * 10;
 
 //Timer
 function countdown() {
@@ -78,18 +110,21 @@ function checkAnswer() {
     if (this.value !== questions[taskIdIndex].correctAnswer) {
         time -= 10;
         if (time < 0) {
+            comment.textContent = "Time is up!";
             time = 0;
         }
+        comment.textContent = "wrong";
+    }
+    else {
+        comment.textContent = "correct!";
     }
 
     taskIdIndex++;
     if (taskIdIndex === questions.length) {
+        comment.textContent = "Your quiz is over!";
         endQuiz();
-
     }
-    else {
-        quizGeneration();
-    }
+    quizGeneration();
     
 }
 
